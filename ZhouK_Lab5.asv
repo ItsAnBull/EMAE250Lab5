@@ -1,0 +1,10 @@
+function output = ZhouK_Lab5(input, target, target_epsilon)
+
+% get the candidate x values in a horizontal vector
+data = transpose(input(:,1))
+
+% initialize the table
+table = zeros(length(candidates));
+
+d1 = abs(data(1)-target)
+d2 = abs(data(1)-target)
