@@ -1,0 +1,9 @@
+clc; clear all;
+
+data = [0 4; 2 5.19; 3 5.728; 7 3.072; 8 1.859; 9 1.067; 11 1.66];
+
+target = 4;
+
+epsilon = 0.001;
+
+ZhouK_Lab5(data, target, epsilon)
