@@ -187,11 +187,17 @@ while first || ~xor(data_remaining,reached_epsilon > target_epsilon)
     n = 2 + balance(1) + balance(2);
 
     % ----------STEP 5- Calculate the divided differences----------
+    
+    % initiate the necessary parmeters to parse the table in a diagonal
+    % bottom left to upper right pattern
+    row = n-1;
+    col = 3;
 
-    for index = 1:n
+    for i=1:n-1
 
-        
-
+        % update the parsing indices accordingly
+        row = row - 1;
+        col = col + 1;
     end
 
 end

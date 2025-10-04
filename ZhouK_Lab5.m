@@ -84,7 +84,7 @@ first = true;
 
 % intialize the variable to keep track of the number of points in the data
 % table
-n = 2
+n = 2;
 
 % the while loop runs until either there is no more data, or the
 % convergence has been reached
@@ -187,5 +187,22 @@ while first || ~xor(data_remaining,reached_epsilon > target_epsilon)
     n = 2 + balance(1) + balance(2);
 
     % ----------STEP 5- Calculate the divided differences----------
+    
+    % initiate the necessary parmeters to parse the table in a diagonal
+    % bottom left to upper right pattern
+    row = n-1;
+    col = 3;
+
+    % enter only as many values into the table as one less than the total
+    % amount of points currently entered into the table
+    for i=1:n-1
+        
+        % calculate the value to insert into the table
+        table(row,col) = (table(row+1,col-1) - table(row,col-1)) / (table(n,1) - table(row,1));
+
+        % update the parsing indices accordingly
+        row = row - 1;
+        col = col + 1;
+    end
 
 end
