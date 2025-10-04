@@ -62,5 +62,130 @@ end
 
 % ------------STEP 2 - Calculate the 1st divided difference------------
 
+% calculate the first divided difference and insert it into the table
 table(1,3) = (table(2,2) - table(1,2)) / ((table(2,1) - table(1,1)));
 
+% ------------STEP 3 - Calculate the 1st approximation------------
+
+% calculate the linear approximation of the target
+approx = table(1,2) + table(1,3) * (target - table(1,1));
+
+% ------------STEP 4-7 - Perform the NDDP algorithm------------
+
+% initialize the first parameter for the output vector
+data_remaining = 1;
+
+% initialize the vector to keep track of how many xl and xu values have
+% been added
+balance = [0 0];
+
+% intialize the short circuit variable
+first = true;
+
+% intialize the variable to keep track of the number of points in the data
+% table
+n = 2
+
+% the while loop runs until either there is no more data, or the
+% convergence has been reached
+while first || ~xor(data_remaining,reached_epsilon > target_epsilon)
+
+    % remove the first flag
+    first = false;
+
+    % ------------STEP 4- Select the next data point ------------
+    
+    % Case 1: the data set has been fully exhausted
+    if (xl <= 0 && xu > data_length)
+
+        % indicate that there is no data remaining 
+        data_remaining = 0;
+    
+    % Case 2: candidates for xl have been exhausted
+    elseif (xl <= 0) 
+
+        % update the balance counter when adding an element from xu
+        balance(2) = balance(2) + 1;
+
+        % enter into the table the data corresponding to xu
+        table(n+1,1:2) = input(xu,1:2);
+
+        % increment the index of xl
+        xu = xu+1;
+
+    % Case 3: candidates for xu have been exhausted
+    elseif (xu > data_length)
+
+        % update the balance counter when adding an element from xl
+        balance(1) = balance(1) + 1;
+
+        % enter into the table the data corresponding to xl
+        table(n+1,1:2) = input(xl,1:2);
+        
+        % decrement the index of xl
+        xl = xl-1;
+
+    % Case 4: the differences are equal to one another   
+    elseif abs(target-input(xl,1)) == abs(target-input(xu,1))
+
+        % Case 5: there are an even amount of xl and xu values, or there
+        % are more xl than xu values
+        if balance(1) >= balance(2)
+            
+            % update the balance counter when adding an element from xu
+            balance(2) = balance(2) + 1;
+
+            % enter into the table the data corresponding to xu
+            table(n+1,1:2) = input(xu,1:2);
+
+            % increment the index of xu
+            xu = xu+1;
+        
+        % Case 6: there are more xu values than xl values in the table, so
+        % add an xl value
+        else
+             
+            % update the balance counter when adding an element from xl
+            balance(1) = balance(1) + 1;
+
+            % enter into the table the data corresponding to xl
+            table(n+1,1:2) = input(xl,1:2);
+
+            % decrement the index of xl
+            xl = xl-1;
+
+        end
+
+
+    % Case 7: select xl
+    elseif abs(target-input(xl,1)) < abs(target-input(xu,1))
+
+        % update the balance counter when adding an element from xl
+        balance(1) = balance(1) + 1;
+
+        % enter into the table the data corresponding to xl
+        table(n+1,1:2) = input(xl,1:2);
+
+        % decrement the index of xl
+        xl = xl-1;
+
+    % Case 8: select xu
+    elseif abs(target-input(xl,1)) > abs(target-input(xu,1))
+
+        % update the balance counter when adding an element from xu
+        balance(2) = balance(2) + 1;
+
+        % enter into the table the data corresponding to xu
+        table(n+1,1:2) = input(xu,1:2);
+
+        % decrement the index of xu
+        xu = xu+1;
+
+    end
+
+    % calculate the number of elements in the table
+    n = 2 + balance(1) + balance(2);
+
+    % ----------STEP 5- Calculate the divided differences----------
+
+end
