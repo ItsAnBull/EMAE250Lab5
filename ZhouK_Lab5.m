@@ -3,11 +3,11 @@ function output = ZhouK_Lab5(input, target, target_epsilon)
 % get the candidate x values in a horizontal vector for easy parsing
 data = transpose(input(:,1))
 
-% initialize the table
-table = zeros(length(data));
-
 % initialize a variable to store the length of the data vector
 data_length = length(data);
+
+% initialize the table
+table = zeros(data_length, data_length + 1);
 
 % --------------------STEP 1 - DETERMINE x0 and x1--------------------
 
@@ -60,5 +60,7 @@ else
 
 end
 
-% --------------------STEP 2 - DETERMINE x2, x3 ... xn--------------------
+% ------------STEP 2 - Calculate the 1st divided difference------------
+
+table(1,3) = (table(2,2) - table(1,2)) / ((table(2,1) - table(1,1)));
 
